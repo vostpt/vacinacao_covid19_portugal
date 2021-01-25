@@ -1,0 +1,42 @@
+name: Run scrapping script for getting vaccines status
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+
+  workflow_dispatch:
+    inputs:
+      webhook:
+        description: 'Webhook URL to notify the update'     
+        required: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        container: python:3
+
+        steps:
+          - uses: actions/checkout@v2
+            with:
+              ref: ${{ github.head_ref }}
+          - name: Install dependencies
+            run: |
+              python -m pip install --upgrade pip
+              python -m pip install -r scripts/requirements.txt
+          - name: Scrap vaccinations data
+            run: python scripts/vacinacao.py
+            env: 
+              ENV_VACC: ${{ secrets.ENV_VACC }}
+              ENV_WEBHOOK: ${{ secrets.ENV_WEBHOOK }}
+              ENV_WEBHOOK_GACTION:  ${{ github.event.inputs.webhook }}" 
+          # Only to notify that there are new data
+          - name: Webhook POST Action
+            uses: muinmomin/webhook-action@v1.0.0
+            with:
+              url: ${{ secrets.ENV_WEBHOOK }}
+              data: "{}"
+          - name: Commit changes
+            uses: stefanzweifel/git-auto-commit-action@v4.1.1
+            with:
+                commit_message: Update vaccinations data
+                branch: ${{ github.head_ref }}

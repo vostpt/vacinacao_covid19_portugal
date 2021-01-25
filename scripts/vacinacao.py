@@ -68,8 +68,7 @@ class VaccinesScrapping:
         a json
         """
 
-        url = f"https://services5.arcgis.com/eoFbezv6KiXqcnKq/arcgis/rest/services/Covid19_Total_Vacinados/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset=0&resultRecordCount=50&resultType=standard&cacheHint=true"
-
+        url = os.getenv('ENV_VACC', '')
         response = requests.get(url)
 
         assert (
