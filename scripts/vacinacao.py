@@ -26,11 +26,53 @@ logger.setLevel(logging.INFO)
 
 target_file = 'vacinacao.csv'
 
+
+class VaccinesNotify:
+    """
+    Class to handle all the notification platforms to use and send information
+    """
+
+    def start(self, data):
+        self.__parse_webhooks()
+        payload = self.__parse_payload(data)
+
+        for webhook in self.webhooks:
+            self.__send_post(webhook, payload)
+
+    def __parse_webhooks(self):
+
+        urls = os.getenv('ENV_WEBHOOK', '')
+
+        self.webhooks = urls.split(',')
+
+    def __parse_payload(self, data):
+        """
+        For now generic parse of the data from Vaccines info and into a payload to be sent to the webhook.
+        """
+
+        df = pd.DataFrame.from_records(data)
+
+        payload = {
+            'username': "Dados Vaccinacao",
+            'avatar_url': "",
+            'content': f"*Dados recolhidos às {datetime.now()}* \n\n{df}"
+        }
+
+        return payload
+
+    def __send_post(self, url, payload):
+        headers={'Content-type': 'application/json'}
+        requests.post(url, json=payload, headers=headers)
+
+
 class VaccinesScrapping:
     """
     Class to manage scrapping of the official vacinnes data of Portugal, 
     Source from dashboard of min-saude
     """
+
+    def __init__(self):
+        self.notify = VaccinesNotify()
 
     def start(self):
         self.__get_vacines_status()
@@ -44,6 +86,7 @@ class VaccinesScrapping:
         data = self.__parse(data)
         self.__write_backup(data)
         self.__update_report(data)
+        self.notify.start(data)
 
     def __parse(self, data):
         """
@@ -101,7 +144,6 @@ class VaccinesScrapping:
                 df_current.to_csv(target_file, index=False)
             else:
                 df.to_csv(target_file, index=False)
-
 
         logger.info("CSV Created")
 
