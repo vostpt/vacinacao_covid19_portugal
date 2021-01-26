@@ -50,15 +50,21 @@ class VaccinesNotify:
         For now generic parse of the data from Vaccines info and into a payload to be sent to the webhook.
         """
 
-        df = pd.DataFrame.from_records(data)
+        content = self.__data_to_string(data)
 
         payload = {
             'username': "Dados Vaccinacao",
             'avatar_url': "",
-            'content': f"*Dados recolhidos às {datetime.now()}* \n\n{df}"
+            'content': content
         }
 
         return payload
+
+    def __data_to_string(self,data):
+        content = ""
+        for day in data: 
+            content += f"**Dia**: {day['DataISO']}\n**Inoculacao1**: {day['Inoculacao1']}\n**Inoculacao1_Ac**: {day['Inoculacao1_Ac']}\n**Inoculacao2**: {day['Inoculacao2']}\n**Inoculacao2_Ac**: {day['Inoculacao2_Ac']}\n**Vacinados**: {day['Vacinados']}\n**Vacinados_Ac**: {day['Vacinados_Ac']}\n**FID**: {day['FID']}\n---\n"
+        return content
 
     def __send_post(self, url, payload):
         headers={'Content-type': 'application/json'}
