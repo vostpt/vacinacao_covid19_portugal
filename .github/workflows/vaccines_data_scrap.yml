@@ -2,7 +2,7 @@ name: Run scrapping script for getting vaccines status
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 */12 * * *"
 
   workflow_dispatch:
     inputs:
@@ -29,12 +29,6 @@ jobs:
               ENV_VACC: ${{ secrets.ENV_VACC }}
               ENV_WEBHOOK: ${{ secrets.ENV_WEBHOOK }}
               ENV_WEBHOOK_GACTION:  ${{ github.event.inputs.webhook }}" 
-          # Only to notify that there are new data
-          - name: Webhook POST Action
-            uses: muinmomin/webhook-action@v1.0.0
-            with:
-              url: ${{ secrets.ENV_WEBHOOK }}
-              data: "{}"
           - name: Commit changes
             uses: stefanzweifel/git-auto-commit-action@v4.1.1
             with:
