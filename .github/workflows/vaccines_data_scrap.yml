@@ -2,7 +2,7 @@ name: Run scrapping script for getting vaccines status
 
 on:
   schedule:
-    - cron: "30 */12 * * *"
+    - cron: "30 14 * * *"
 
   workflow_dispatch:
     inputs:
