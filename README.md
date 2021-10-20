@@ -5,3 +5,7 @@
 ## Actualização
 
 A partir de 27 Setembro 2021, o sitio onde se ia buscar a informação de vacinação deixou de ser actualizado, e por isso, este projecto também parou.
+
+## Actualização 20 OUT 2021
+
+A partir de 20 outubro 20201 efectuo-se o fork do projecto original para continuar a receber dados, mesmo que sem atualizações 
