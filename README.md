@@ -8,4 +8,4 @@ A partir de 27 Setembro 2021, o sitio onde se ia buscar a informação de vacina
 
 ## Actualização 20 OUT 2021
 
-A partir de 20 outubro 20201 efectuo-se o fork do projecto original para continuar a receber dados, mesmo que sem atualizações 
+A partir de 20 outubro 20201 efectuou-se o fork do projecto original para continuar a receber dados, mesmo que sem atualizações. 
